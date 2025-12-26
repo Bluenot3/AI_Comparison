@@ -1,0 +1,563 @@
+<html><head><base href="https://zenprojects.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEN Projects: Interactive AI-Driven Business Transformation</title>
+<script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
+    --text-color: #34495e;
+    --bg-color: #ecf0f1;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .title {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .project-card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .project-title {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+
+  .project-description {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .impact-toggle {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+  }
+
+  .impact-toggle:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+  }
+
+  .impact-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .impact-item {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+  }
+
+  .impact-item::before {
+    content: "↑";
+    color: var(--secondary-color);
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .simulation-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-top: 3rem;
+  }
+
+  .simulation-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .simulation-description {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  .simulation-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+
+  .simulation-control {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+  }
+
+  .simulation-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+  }
+
+  .simulation-input {
+    padding: 0.8rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .simulation-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+  }
+
+  .simulation-chart {
+    width: 100%;
+    height: 400px;
+    margin-top: 2rem;
+  }
+
+  .lottie-container {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .insights-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-top: 3rem;
+  }
+
+  .insights-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .insight-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .insight-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .insight-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+  }
+
+  .insight-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+  }
+
+  .insight-description {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const ProjectCard = ({ title, description, impact, expanded, toggleExpand }) => (
+  <div className="project-card">
+    <h3 className="project-title">{title}</h3>
+    <p className="project-description">{description}</p>
+    <button 
+      onClick={toggleExpand}
+      className="impact-toggle"
+    >
+      {expanded ? 'Hide Impact' : 'Show Impact'}
+    </button>
+    {expanded && (
+      <ul className="impact-list fade-in-up">
+        {impact.map((item, index) => (
+          <li key={index} className="impact-item">{item}</li>
+        ))}
+      </ul>
+    )}
+  </div>
+);
+
+const SimulationComponent = () => {
+  const [employees, setEmployees] = React.useState(100);
+  const [automationLevel, setAutomationLevel] = React.useState(50);
+  const [aiInvestment, setAiInvestment] = React.useState(100000);
+  const [industry, setIndustry] = React.useState('manufacturing');
+
+  React.useEffect(() => {
+    const ctx = document.getElementById('simulationChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+        datasets: [
+          {
+            label: 'Productivity',
+            data: calculateProductivity(),
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+          },
+          {
+            label: 'Cost Savings',
+            data: calculateCostSavings(),
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+          },
+          {
+            label: 'Revenue Growth',
+            data: calculateRevenueGrowth(),
+            borderColor: 'rgb(255, 205, 86)',
+            tension: 0.1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Index (Base Year = 100)'
+            }
+          }
+        }
+      }
+    });
+
+    return () => chart.destroy();
+  }, [employees, automationLevel, aiInvestment, industry]);
+
+  const calculateProductivity = () => {
+    const baseProductivity = employees * 100;
+    const automationBoost = (automationLevel / 100) * 0.5;
+    const aiBoost = (aiInvestment / 100000) * 0.3;
+    const industryFactor = getIndustryFactor(industry);
+    
+    return [1, 2, 3, 4, 5].map(year => 
+      baseProductivity * (1 + automationBoost + aiBoost) * Math.pow(1.1, year - 1) * industryFactor
+    );
+  };
+
+  const calculateCostSavings = () => {
+    const baseSavings = employees * 1000;
+    const automationSavings = (automationLevel / 100) * 0.4;
+    const aiSavings = (aiInvestment / 100000) * 0.2;
+    const industryFactor = getIndustryFactor(industry);
+
+    return [1, 2, 3, 4, 5].map(year => 
+      baseSavings * (1 + automationSavings + aiSavings) * Math.pow(1.15, year - 1) * industryFactor
+    );
+  };
+
+  const calculateRevenueGrowth = () => {
+    const baseRevenue = employees * 10000;
+    const automationGrowth = (automationLevel / 100) * 0.3;
+    const aiGrowth = (aiInvestment / 100000) * 0.4;
+    const industryFactor = getIndustryFactor(industry);
+
+    return [1, 2, 3, 4, 5].map(year => 
+      baseRevenue * (1 + automationGrowth + aiGrowth) * Math.pow(1.2, year - 1) * industryFactor
+    );
+  };
+
+  const getIndustryFactor = (industry) => {
+    switch (industry) {
+      case 'manufacturing': return 1.2;
+      case 'services': return 1.1;
+      case 'retail': return 1.0;
+      case 'healthcare': return 1.3;
+      default: return 1.0;
+    }
+  };
+
+  return (
+    <div className="simulation-container">
+      <h2 className="simulation-title">Interactive ISA Strategy Simulator</h2>
+      <p className="simulation-description">
+        Experience the power of our ISA (Improve, Save & Automate) strategy. Adjust the parameters 
+        below to see how AI and automation could transform your business over the next 5 years. 
+        Watch as productivity soars, costs decrease, and revenue grows!
+      </p>
+      <div className="simulation-controls">
+        <div className="simulation-control">
+          <label className="simulation-label">Number of Employees</label>
+          <input 
+            type="number" 
+            value={employees} 
+            onChange={(e) => setEmployees(parseInt(e.target.value))}
+            className="simulation-input"
+            min="10"
+            max="10000"
+          />
+        </div>
+        <div className="simulation-control">
+          <label className="simulation-label">Automation Level (%)</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="100" 
+            value={automationLevel} 
+            onChange={(e) => setAutomationLevel(parseInt(e.target.value))}
+            className="simulation-input"
+          />
+        </div>
+        <div className="simulation-control">
+          <label className="simulation-label">AI Investment ($)</label>
+          <input 
+            type="number" 
+            value={aiInvestment} 
+            onChange={(e) => setAiInvestment(parseInt(e.target.value))}
+            className="simulation-input"
+            min="10000"
+            max="10000000"
+            step="10000"
+          />
+        </div>
+        <div className="simulation-control">
+          <label className="simulation-label">Industry</label>
+          <select 
+            value={industry} 
+            onChange={(e) => setIndustry(e.target.value)}
+            className="simulation-input"
+          >
+            <option value="manufacturing">Manufacturing</option>
+            <option value="services">Services</option>
+            <option value="retail">Retail</option>
+            <option value="healthcare">Healthcare</option>
+          </select>
+        </div>
+      </div>
+      <canvas id="simulationChart" className="simulation-chart"></canvas>
+    </div>
+  );
+};
+
+const InsightsComponent = () => (
+  <div className="insights-container">
+    <h2 className="insights-title">Key Insights from ISA Implementation</h2>
+    <div className="insights-grid">
+      <div className="insight-card">
+        <div className="insight-icon">🚀</div>
+        <h3 className="insight-title">Accelerated Growth</h3>
+        <p className="insight-description">On average, businesses implementing ISA strategies see a 35% increase in growth rate within the first year.</p>
+      </div>
+      <div className="insight-card">
+        <div className="insight-icon">💰</div>
+        <h3 className="insight-title">Cost Reduction</h3>
+        <p className="insight-description">ISA implementations typically result in a 25-40% reduction in operational costs over a 3-year period.</p>
+      </div>
+      <div className="insight-card">
+        <div className="insight-icon">🤖</div>
+        <h3 className="insight-title">Automation Impact</h3>
+        <p className="insight-description">Businesses report up to 60% of routine tasks automated, freeing employees to focus on high-value activities.</p>
+      </div>
+      <div className="insight-card">
+        <div className="insight-icon">📈</div>
+        <h3 className="insight-title">ROI on AI</h3>
+        <p className="insight-description">Companies investing in AI as part of their ISA strategy see an average ROI of 250% over 5 years.</p>
+      </div>
+    </div>
+  </div>
+);
+
+const ZENProjectsPage = () => {
+  const [expandedProject, setExpandedProject] = React.useState(null);
+
+  const projects = [
+    {
+      title: "AI-Powered Process Automation for Manufacturing",
+      description: "Revolutionized operations for a leading car manufacturer by implementing an end-to-end AI-driven process automation system. This cutting-edge solution integrated machine learning algorithms with IoT sensors to optimize production lines, predict maintenance needs, and streamline supply chain operations.",
+      impact: [
+        "Reduced manual processing costs by 90%, saving $4.5 million annually",
+        "Increased overall productivity by 40% through intelligent task automation and resource allocation",
+        "Implemented predictive maintenance, reducing unplanned downtime by 35% and extending equipment lifespan by 25%",
+        "Optimized inventory management, reducing carrying costs by 30% and improving order fulfillment rates by 22%"
+      ]
+    },
+    {
+      title: "Smart Resource Management System for Global Non-Profit",
+      description: "Developed a sophisticated AI-driven resource and volunteer management system for a worldwide humanitarian organization. This custom solution leveraged Microsoft Power Platform and Azure services to create a scalable, intelligent system that revolutionized how the non-profit coordinated its global efforts.",
+      impact: [
+        "Eliminated over 10,000 hours of manual coordination effort annually across 50 countries",
+        "Improved volunteer engagement and retention rates by 25%, leading to a 40% increase in mission impact",
+        "Increased successful grant applications by 15% through automated reporting and predictive analytics",
+        "Optimized resource allocation, resulting in a 20% increase in the number of beneficiaries served with the same budget"
+      ]
+    },
+    {
+      title: "AI-Enhanced Customer Service Automation for E-commerce Giant",
+      description: "Designed and implemented a state-of-the-art customer service automation system for one of the world's largest e-commerce platforms. This solution utilized advanced natural language processing and machine learning algorithms to understand and respond to customer inquiries across multiple languages and channels.",
+      impact: [
+        "Reduced average response time by 80%, from 2 hours to 24 minutes, significantly improving customer satisfaction",
+        "Automated resolution of 65% of customer inquiries, freeing up human agents to handle complex issues",
+        "Improved customer satisfaction scores by 30%, leading to a 15% increase in repeat purchases",
+        "Enabled 24/7 multilingual support across 20 languages without increasing staffing costs"
+      ]
+    },
+    {
+      title: "Intelligent Supply Chain Optimization for Global Retailer",
+      description: "Created a comprehensive supply chain optimization solution for a multinational retail corporation. This innovative system utilized AI and IoT technologies to create a responsive, self-adjusting supply chain that could adapt to changing market conditions in real-time.",
+      impact: [
+        "Reduced inventory holding costs by 22% through AI-driven predictive stocking and demand forecasting",
+        "Improved on-time delivery rates by 18%, enhancing customer satisfaction and reducing lost sales",
+        "Decreased transportation costs by 15% through intelligent route optimization and load consolidation",
+        "Reduced product spoilage in perishable goods by 30% through smart inventory management"
+      ]
+    }
+  ];
+
+  React.useEffect(() => {
+    gsap.from(".project-card", {
+      duration: 1,
+      y: 50,
+      opacity: 0,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+
+    const lottieContainer = document.getElementById('lottie-animation');
+    lottie.loadAnimation({
+      container: lottieContainer,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'https://assets2.lottiefiles.com/packages/lf20_ebqrxpqg.json' // AI/Technology themed animation
+    });
+  }, []);
+
+  return (
+    <div className="container">
+      <header className="header">
+        <h1 className="title">ZEN Projects: Pioneering AI-Driven Business Transformation</h1>
+        <p className="subtitle">
+          Embark on a journey of unparalleled innovation with our ISA (Improve, Save & Automate) initiative. 
+          Witness firsthand how cutting-edge AI and automation can revolutionize efficiency, slash costs, and catapult productivity to new heights.
+        </p>
+        <div className="lottie-container" id="lottie-animation"></div>
+      </header>
+
+      <div className="project-grid">
+        {projects.map((project, index) => (
+          <ProjectCard 
+            key={index}
+            {...project}
+            expanded={expandedProject === index}
+            toggleExpand={() => setExpandedProject(expandedProject === index ? null : index)}
+          />
+        ))}
+      </div>
+
+      <SimulationComponent />
+
+      <InsightsComponent />
+    </div>
+  );
+};
+
+ReactDOM.render(<ZENProjectsPage />, document.getElementById('root'));
+</script>
+</body></html>
